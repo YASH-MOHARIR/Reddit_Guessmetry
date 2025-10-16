@@ -1,0 +1,24 @@
+{
+  "enabled": true,
+  "name": "Auto Commit After Tasks",
+  "description": "Automatically commits code changes to GitHub with proper title and description after each task is completed",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/**/*",
+      "*.json",
+      "*.md",
+      "*.ts",
+      "*.tsx",
+      "*.js",
+      "*.jsx",
+      "*.css",
+      "*.html"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Files have been modified. Review the changes that were made in the recent task, then commit them to GitHub with a clear, descriptive commit message that includes: 1) A concise title summarizing what task was completed, 2) A description of what specific changes were made to accomplish that task. Use git commands to stage, commit, and push the changes."
+  }
+}

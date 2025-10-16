@@ -18,11 +18,15 @@ export const createPost = async (options?: CreatePostOptions) => {
 
   // Determine title and splash based on whether custom prompt is provided
   const title = options?.description
-    ? `Geometric Pictionary: ${options.description.substring(0, 50)}${options.description.length > 50 ? '...' : ''}`
+    ? `🎨 Guess the Shape: ${options.description.substring(0, 60)}${options.description.length > 60 ? '...' : ''}`
     : 'Geometric Pictionary Challenge';
 
+  const splashHeading = options?.description
+    ? '🎯 Can You Guess?'
+    : 'Geometric Pictionary';
+
   const splashDescription = options?.description
-    ? 'Can you guess what this geometric description represents?'
+    ? 'Read the geometric description and guess what it represents. See how your answer compares to others!'
     : 'An exciting geometric guessing game';
 
   // Create the post
@@ -30,9 +34,9 @@ export const createPost = async (options?: CreatePostOptions) => {
     splash: {
       appDisplayName: 'Geometric Pictionary',
       backgroundUri: 'default-splash.png',
-      buttonLabel: 'Play Now',
+      buttonLabel: '🎮 Guess Now',
       description: splashDescription,
-      heading: 'Geometric Pictionary',
+      heading: splashHeading,
       appIconUri: 'default-icon.png',
     },
     postData: {

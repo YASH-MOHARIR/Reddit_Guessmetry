@@ -1082,16 +1082,263 @@ router.post('/internal/menu/post-create', async (_req, res): Promise<void> => {
   }
 });
 
+// GET endpoint to show the form
+router.get('/internal/menu/post-create-with-form', async (_req, res): Promise<void> => {
+  const formHTML = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Geometric Challenge</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 600px;
+      width: 100%;
+      padding: 40px;
+    }
+    h1 {
+      color: #1a1a1a;
+      font-size: 28px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .subtitle {
+      color: #666;
+      text-align: center;
+      margin-bottom: 32px;
+      font-size: 14px;
+    }
+    .form-group {
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .help-text {
+      color: #666;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #FF4500;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    button {
+      width: 100%;
+      background: #FF4500;
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover:not(:disabled) {
+      background: #D93900;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .example {
+      background: #f5f5f5;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+    .example-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    .example-item {
+      color: #666;
+      margin: 4px 0;
+    }
+    .success {
+      background: #4caf50;
+      color: white;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .error {
+      background: #f44336;
+      color: white;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 16px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Create Geometric Challenge</h1>
+    <p class="subtitle">Describe a shape or object using geometric terms</p>
+    
+    <div id="success" class="success"></div>
+    <div id="error" class="error"></div>
+    
+    <form id="challengeForm">
+      <div class="form-group">
+        <label for="description">Geometric Description *</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          required
+          placeholder="e.g., A big rectangle with a right angle triangle on top with its longer side as base"
+        ></textarea>
+        <p class="help-text">Describe your object using shapes, angles, and geometric terms</p>
+        
+        <div class="example">
+          <div class="example-title">Examples:</div>
+          <div class="example-item">• "Two circles connected by a rectangle" → dumbbell</div>
+          <div class="example-item">• "A circle with triangular slices removed" → pizza</div>
+          <div class="example-item">• "Three rectangles forming a U shape" → goal post</div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="answer">Answer *</label>
+        <input 
+          type="text" 
+          id="answer" 
+          name="answer" 
+          required
+          placeholder="e.g., house"
+          maxlength="50"
+        />
+        <p class="help-text">What does your description represent?</p>
+      </div>
+      
+      <button type="submit" id="submitBtn">Create Challenge</button>
+    </form>
+  </div>
+  
+  <script>
+    const form = document.getElementById('challengeForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const successDiv = document.getElementById('success');
+    const errorDiv = document.getElementById('error');
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const description = document.getElementById('description').value.trim();
+      const answer = document.getElementById('answer').value.trim();
+      
+      if (!description || !answer) {
+        showError('Please fill in all fields');
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating...';
+      
+      try {
+        const response = await fetch('/internal/menu/post-create-with-form', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ description, answer }),
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to create challenge');
+        }
+        
+        showSuccess('Challenge created successfully! Redirecting...');
+        
+        setTimeout(() => {
+          if (data.navigateTo) {
+            window.location.href = data.navigateTo;
+          }
+        }, 1500);
+        
+      } catch (error) {
+        showError(error.message || 'Failed to create challenge. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Challenge';
+      }
+    });
+    
+    function showSuccess(message) {
+      successDiv.textContent = message;
+      successDiv.style.display = 'block';
+      errorDiv.style.display = 'none';
+    }
+    
+    function showError(message) {
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      successDiv.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
+  `;
+  
+  res.setHeader('Content-Type', 'text/html');
+  res.send(formHTML);
+});
+
+// POST endpoint to handle form submission
 router.post<
   unknown,
   { navigateTo: string } | { status: string; message: string },
   { description?: string; answer?: string }
 >('/internal/menu/post-create-with-form', async (req, res): Promise<void> => {
   try {
-    // For now, use default prompts since Devvit menu items don't support forms
-    // In the future, this could be enhanced with a custom form UI
-    const description = req.body?.description || 'Two circles connected by a rectangle';
-    const answer = req.body?.answer || 'dumbbell';
+    const { description, answer } = req.body;
+
+    if (!description || !answer) {
+      res.status(400).json({
+        status: 'error',
+        message: 'Description and answer are required',
+      });
+      return;
+    }
 
     console.log('[Post Creation] Creating post with prompt:', { description, answer });
 

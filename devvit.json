@@ -19,7 +19,7 @@
   "menu": {
     "items": [
       {
-        "label": "Create Geometric Pictionary Challenge",
+        "label": "Create Geometric Challenge",
         "description": "Create a custom geometric description for players to guess",
         "location": "subreddit",
         "forUserType": "moderator",
