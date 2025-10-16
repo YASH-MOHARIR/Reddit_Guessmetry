@@ -1,0 +1,176 @@
+@import 'tailwindcss';
+
+/* Ensure minimum font size on mobile to prevent zoom */
+html {
+  font-size: 16px;
+}
+
+/* Responsive breakpoints:
+   - Mobile: < 768px
+   - Tablet: 768px - 1024px
+   - Desktop: > 1024px
+*/
+
+/* Phase transition animations - fade + scale (300ms) */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 300ms ease-in-out;
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.animate-fade-out {
+  animation: fade-out 300ms ease-in-out;
+}
+
+/* Bounce animation for correct answer reveal */
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 500ms ease-out;
+}
+
+/* Count-up animation for score updates */
+@keyframes count-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-count-up {
+  animation: count-up 200ms ease-out;
+}
+
+/* Pulse animation for timer urgency (<5s) */
+@keyframes pulse-urgent {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.animate-pulse-urgent {
+  animation: pulse-urgent 1s ease-in-out infinite;
+}
+
+/* Slide up animation for points earned */
+@keyframes slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 300ms ease-out;
+}
+
+/* Ensure touch targets are at least 44x44px on mobile */
+@media (max-width: 767px) {
+  button,
+  input[type='submit'],
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Support for reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Button hover and active states */
+button {
+  transition:
+    transform 150ms ease-out,
+    opacity 150ms ease-out;
+}
+
+button:hover:not(:disabled) {
+  transform: scale(1.02);
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Accessibility: Focus indicators */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid #ff4500;
+  outline-offset: 2px;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
