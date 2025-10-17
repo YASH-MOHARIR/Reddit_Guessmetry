@@ -35,10 +35,10 @@ export const ResultsView = ({
     return () => clearInterval(interval);
   }, [autoRefreshEnabled, onRefresh]);
 
-  const handleManualRefresh = () => {
+  const handleManualRefresh = async () => {
     setIsRefreshing(true);
     try {
-      onRefresh();
+      await onRefresh();
     } finally {
       // Add a small delay to show the loading state
       setTimeout(() => setIsRefreshing(false), 300);

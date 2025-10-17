@@ -51,7 +51,7 @@ describe('End-to-End Flow Tests', () => {
       );
 
       // Step 2: Player 1 opens post and checks if they've guessed
-      vi.mocked(mockRedis.get).mockResolvedValueOnce(null);
+      vi.mocked(mockRedis.get).mockResolvedValueOnce('');
       const player1HasGuessed = await hasUserGuessed(mockRedis, postId, player1);
       expect(player1HasGuessed).toBe(false);
 
@@ -74,7 +74,7 @@ describe('End-to-End Flow Tests', () => {
       const player2Guess = 'Barbell';
       const normalizedGuess2 = normalizeGuess(player2Guess);
 
-      vi.mocked(mockRedis.get).mockResolvedValueOnce(null);
+      vi.mocked(mockRedis.get).mockResolvedValueOnce('');
       const player2HasGuessed = await hasUserGuessed(mockRedis, postId, player2);
       expect(player2HasGuessed).toBe(false);
 
@@ -111,7 +111,9 @@ describe('End-to-End Flow Tests', () => {
       const commonGuess = 'jellyfish';
 
       // All players submit the same guess
-      for (const player of players) {
+      for (let i = 0; i < players.length; i++) {
+        const player = players[i];
+        if (!player) continue;
         await storeGuess(mockRedis, 0, commonGuess, postId);
         await addPlayerToSet(mockRedis, 0, player, postId);
         await storePlayerGuess(mockRedis, 0, player, commonGuess, postId);
@@ -140,7 +142,9 @@ describe('End-to-End Flow Tests', () => {
       ];
 
       for (let i = 0; i < variations.length; i++) {
-        const normalized = normalizeGuess(variations[i]);
+        const variation = variations[i];
+        if (!variation) continue;
+        const normalized = normalizeGuess(variation);
         await storeGuess(mockRedis, 0, normalized, postId);
         await addPlayerToSet(mockRedis, 0, `user${i}`, postId);
         await storePlayerGuess(mockRedis, 0, `user${i}`, normalized, postId);
@@ -157,7 +161,6 @@ describe('End-to-End Flow Tests', () => {
   describe('Error Handling', () => {
     it('should handle Redis failures gracefully', async () => {
       const postId = 'test-post-error';
-      const player = 'error-user';
       const guess = 'test';
 
       // Simulate Redis failure
@@ -199,9 +202,12 @@ describe('End-to-End Flow Tests', () => {
 
       // Submit guesses
       for (let i = 0; i < players.length; i++) {
-        await storeGuess(mockRedis, 0, guesses[i], postId);
-        await addPlayerToSet(mockRedis, 0, players[i], postId);
-        await storePlayerGuess(mockRedis, 0, players[i], guesses[i], postId);
+        const player = players[i];
+        const guess = guesses[i];
+        if (!player || !guess) continue;
+        await storeGuess(mockRedis, 0, guess, postId);
+        await addPlayerToSet(mockRedis, 0, player, postId);
+        await storePlayerGuess(mockRedis, 0, player, guess, postId);
       }
 
       // Mock aggregated results

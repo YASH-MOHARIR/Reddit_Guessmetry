@@ -1,0 +1,62 @@
+Essential Files for Claude Analysis - Guessmetry Project
+========================================================
+
+CORE APPLICATION FILES (Must Have):
+1. src/server/index.ts - Main server logic (all API endpoints, game mechanics)
+2. src/client/App.tsx - Main React app
+3. src/client/main.tsx - Client entry point
+4. src/shared/types/api.ts - Shared type definitions
+
+KEY COMPONENTS:
+5. src/client/components/PromptView.tsx
+6. src/client/components/ResultsView.tsx
+7. src/client/components/GuessInput.tsx
+8. src/client/components/Leaderboard.tsx
+9. src/client/components/GameScreen.tsx
+10. src/client/components/HomeScreen.tsx
+
+CONFIGURATION:
+11. devvit.json - Devvit configuration
+12. package.json - Dependencies and scripts
+13. tsconfig.json - TypeScript config
+
+SHARED TYPES:
+14. src/shared/types/game.ts
+15. src/shared/types/prompt.ts
+
+DOCUMENTATION:
+16. README.md - Project overview
+17. .kiro/specs/geometric-pictionary-phase1/requirements.md
+18. .kiro/specs/geometric-pictionary-phase1/design.md
+19. .kiro/specs/geometric-pictionary-phase1/tasks.md
+
+OPTIONAL BUT HELPFUL:
+20. src/client/index.css - Styling
+21. src/server/utils/retryLogic.ts - Utility functions
+22. GAME_GUIDE.md - Game mechanics
+23. src/server/ERROR_HANDLING.md - Error handling docs
+
+COPY COMMAND (PowerShell):
+Copy-Item src\server\index.ts,"for claude\server-index.ts"
+Copy-Item src\client\App.tsx,"for claude\client-App.tsx"
+Copy-Item src\client\main.tsx,"for claude\client-main.tsx"
+Copy-Item src\shared\types\api.ts,"for claude\types-api.ts"
+Copy-Item src\shared\types\game.ts,"for claude\types-game.ts"
+Copy-Item src\shared\types\prompt.ts,"for claude\types-prompt.ts"
+Copy-Item src\client\components\PromptView.tsx,"for claude\PromptView.tsx"
+Copy-Item src\client\components\ResultsView.tsx,"for claude\ResultsView.tsx"
+Copy-Item src\client\components\GuessInput.tsx,"for claude\GuessInput.tsx"
+Copy-Item src\client\components\Leaderboard.tsx,"for claude\Leaderboard.tsx"
+Copy-Item src\client\components\GameScreen.tsx,"for claude\GameScreen.tsx"
+Copy-Item src\client\components\HomeScreen.tsx,"for claude\HomeScreen.tsx"
+Copy-Item devvit.json,"for claude\devvit.json"
+Copy-Item package.json,"for claude\package.json"
+Copy-Item tsconfig.json,"for claude\tsconfig.json"
+Copy-Item README.md,"for claude\README.md"
+Copy-Item .kiro\specs\geometric-pictionary-phase1\requirements.md,"for claude\requirements.md"
+Copy-Item .kiro\specs\geometric-pictionary-phase1\design.md,"for claude\design.md"
+Copy-Item .kiro\specs\geometric-pictionary-phase1\tasks.md,"for claude\tasks.md"
+Copy-Item src\client\index.css,"for claude\index.css"
+Copy-Item src\server\utils\retryLogic.ts,"for claude\retryLogic.ts"
+Copy-Item GAME_GUIDE.md,"for claude\GAME_GUIDE.md"
+Copy-Item src\server\ERROR_HANDLING.md,"for claude\ERROR_HANDLING.md"

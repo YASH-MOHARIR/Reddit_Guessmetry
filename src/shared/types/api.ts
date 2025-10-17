@@ -1,4 +1,25 @@
-// Init response for game initialization
+// src/shared/types/api.ts
+
+// Consensus voting types
+export type ConsensusScoreTier = 'majority' | 'common' | 'uncommon' | 'rare' | 'unique';
+
+export type ConsensusScore = {
+  pointsEarned: number;
+  matchPercentage: number;
+  tier: ConsensusScoreTier;
+};
+
+export type GuessAggregation = {
+  guess: string;
+  count: number;
+  percentage: number;
+  isPlayerGuess: boolean;
+  isCreatorAnswer: boolean;
+  rank: number;
+  variants?: string[];
+};
+
+// Init response
 export type InitResponse = {
   type: 'init';
   postId: string;
@@ -9,56 +30,7 @@ export type InitResponse = {
   } | null;
 };
 
-export type IncrementResponse = {
-  type: 'increment';
-  postId: string;
-  count: number;
-};
-
-export type DecrementResponse = {
-  type: 'decrement';
-  postId: string;
-  count: number;
-};
-
-// Game-specific API types
-export type GameStartResponse = {
-  type: 'game-start';
-  sessionId: string;
-  username: string;
-};
-
-export type NextPromptResponse = {
-  type: 'next-prompt';
-  prompt: {
-    id: number;
-    promptText: string;
-    difficulty: 'easy' | 'medium' | 'hard';
-    category: 'everyday' | 'animals' | 'reddit' | 'abstract';
-  };
-};
-
-export type GuessResultResponse = {
-  type: 'guess-result';
-  isCorrect: boolean;
-  isClose: boolean;
-  correctAnswer: string;
-  pointsEarned: number;
-  totalScore: number;
-};
-
-export type ErrorResponse = {
-  status: 'error';
-  message: string;
-};
-
-// Consensus voting API types
-export type ConsensusGuessSubmittedResponse = {
-  type: 'consensus-guess-submitted';
-  success: boolean;
-  message: string;
-};
-
+// Consensus results response
 export type ConsensusResultsResponse = {
   type: 'consensus-results';
   aggregation: GuessAggregation[];
@@ -70,20 +42,8 @@ export type ConsensusResultsResponse = {
   creatorAnswerData?: GuessAggregation;
 };
 
-export type HistoricalResultsResponse = {
-  type: 'historical-results';
-  aggregation: GuessAggregation[];
-  creatorAnswer: string;
-  totalPlayers: number;
-  totalGuesses: number;
-  isFinal: true;
-  promptText: string;
-};
-
-export type HistoricalResultsNotFoundResponse = {
-  type: 'historical-results-not-found';
+// Error response
+export type ErrorResponse = {
+  status: 'error';
   message: string;
 };
-
-// Import types from game.ts for use in API responses
-import type { GuessAggregation, ConsensusScore } from './game';

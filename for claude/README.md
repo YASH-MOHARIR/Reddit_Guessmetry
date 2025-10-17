@@ -1,6 +1,6 @@
-# Guessmetry - Geometric Shape Guessing Game
+# Guessmetry - Geometric Pictionary
 
-A Reddit-based guessing game where players visualize geometric shape descriptions and guess what everyday objects they represent. Test your spatial reasoning and see if you can think like the crowd!
+A Reddit-based guessing game where users create challenges by describing objects using geometric shapes, and other players guess what the description represents. After guessing, players see a leaderboard showing the most popular answers ranked by count.
 
 **Play it on Reddit**: Find a Guessmetry post and click "Launch App" to start playing instantly!
 
@@ -8,15 +8,17 @@ A Reddit-based guessing game where players visualize geometric shape description
 
 ## 🎮 What is Guessmetry?
 
-Guessmetry is an innovative guessing game that challenges your ability to visualize geometric shapes and identify everyday objects. Instead of seeing pictures, you read text descriptions like "a circle on top of a rectangle" and must figure out what object is being described (in this case, maybe a lollipop, mushroom, or person?).
+Guessmetry is a unique community-driven guessing game that flips traditional Pictionary on its head. Instead of drawing pictures, users create text descriptions using geometric shapes (like "two circles connected by a rectangle"), and other Reddit users try to guess what object is being described.
 
-The game runs directly inside Reddit posts as a native Devvit app, providing a seamless experience without leaving the platform. Built with React 19 and powered by Devvit's serverless infrastructure with Redis for data persistence, it offers two distinct game modes that test different skills.
+The game runs directly inside Reddit posts as a native Devvit app, providing a seamless experience without leaving the platform. Built with React 19 and powered by Devvit's serverless infrastructure with Redis for data persistence, it creates a social guessing experience where the community's collective answers determine what's "correct."
 
-### Two Game Modes
+### How It Works
 
-**🎯 Classic Mode**: Race against time to match the creator's intended answer. You get 5 seconds to memorize the geometric description, then 20 seconds to submit your guess. Earn 10 points for exact matches and 5 points for close answers.
+**Create**: Any Reddit user can create a geometric description challenge post from the subreddit menu. You provide a geometric description and your intended answer.
 
-**👥 Consensus Mode**: Think like the crowd! After guessing, see how your answer compares to what other players guessed. The more popular your answer, the more points you earn (up to 100 points for majority answers). This mode reveals a live leaderboard showing the top 10 most popular guesses.
+**Guess**: Players read your description and submit their guess. Each player gets one guess per post.
+
+**Discover**: After guessing, players see a live leaderboard showing the top 10 most popular answers, ranked by how many people guessed them. Your guess is highlighted if it made the top 10, and the creator's intended answer is shown separately.
 
 ## 🚀 Quick Start
 
