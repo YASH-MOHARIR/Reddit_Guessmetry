@@ -22,7 +22,6 @@
         "label": "Create Geometric Challenge",
         "description": "Create a custom geometric description for players to guess",
         "location": "subreddit",
-        "forUserType": "moderator",
         "endpoint": "/internal/menu/post-create-with-form"
       }
     ]

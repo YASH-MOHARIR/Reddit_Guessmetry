@@ -46,37 +46,29 @@ export const ResultsView = ({
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Results</h1>
-          <p className="text-lg text-gray-700">
-            Answer: <span className="font-semibold text-[#FF4500]">{creatorAnswer}</span>
-          </p>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Top Guesses</h1>
+          <p className="text-sm text-gray-600">See how your guess compares to others!</p>
         </div>
 
         {/* Top 10 Guesses */}
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Top Guesses</h2>
-
           <div className="space-y-3">
-            {aggregation.map((item) => {
+            {aggregation.map((item, index) => {
               const maxCount = aggregation[0]?.count || 1;
               const barWidth = (item.count / maxCount) * 100;
 
               return (
                 <div
-                  key={item.rank}
+                  key={`${item.guess}-${index}`}
                   className={`relative ${
                     item.isPlayerGuess ? 'ring-2 ring-[#FF4500] rounded-lg p-2 -m-2' : ''
                   }`}
                 >
                   {/* Bar */}
-                  <div className="relative h-12 bg-gray-100 rounded-lg overflow-hidden">
+                  <div className="relative h-14 bg-gray-100 rounded-lg overflow-hidden">
                     <div
                       className={`absolute inset-y-0 left-0 transition-all duration-300 ${
-                        item.isCreatorAnswer
-                          ? 'bg-green-500'
-                          : item.isPlayerGuess
-                            ? 'bg-[#FF4500]'
-                            : 'bg-blue-500'
+                        item.isPlayerGuess ? 'bg-[#FF4500]' : 'bg-blue-500'
                       }`}
                       style={{ width: `${barWidth}%` }}
                     />
@@ -85,14 +77,9 @@ export const ResultsView = ({
                     <div className="relative h-full flex items-center justify-between px-4">
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         <span className="text-lg font-bold text-gray-900">{item.guess}</span>
-                        {item.isCreatorAnswer && (
-                          <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-semibold">
-                            ✓ Correct
-                          </span>
-                        )}
-                        {item.isPlayerGuess && !item.isCreatorAnswer && (
+                        {item.isPlayerGuess && (
                           <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full font-semibold">
-                            Your Guess
+                            You
                           </span>
                         )}
                       </div>
@@ -124,13 +111,20 @@ export const ResultsView = ({
           </p>
         </div>
 
+        {/* Creator's Answer Info */}
+        <div className="bg-green-50 rounded-lg p-4 mb-6 text-center">
+          <p className="text-gray-700">
+            Creator's Answer: <span className="font-bold text-green-700">{creatorAnswer}</span>
+          </p>
+        </div>
+
         {/* Player Score */}
         {playerGuess && (
           <div className="bg-blue-50 rounded-lg p-4 md:p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-3">Your Score</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-3">Your Guess</h3>
             <div className="space-y-2">
               <p className="text-gray-700">
-                Your guess: <span className="font-semibold">{playerGuess}</span>
+                You guessed: <span className="font-semibold text-[#FF4500]">{playerGuess}</span>
               </p>
               <p className="text-gray-700">
                 Points earned:{' '}

@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Commit on Task Completion",
+  "description": "Automatically commits code to GitHub with a proper description and title that includes all changes made in the task from the spec. This runs after each parent task with all sub-tasks have been marked completed by Kiro.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      ".kiro/**/*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A parent task and all its sub-tasks have been marked completed in Kiro. Review the task specification and all changes made across the codebase. Create a git commit with a clear, descriptive title and detailed commit message that summarizes all the changes implemented for this task. The commit message should reference the task from the spec and list the key modifications made. Then push the commit to GitHub."
+  }
+}

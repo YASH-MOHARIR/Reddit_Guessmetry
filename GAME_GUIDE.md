@@ -6,9 +6,9 @@ Geometric Pictionary is a Reddit game where players describe objects using geome
 
 ## How It Works
 
-### Phase 1: Creating a Challenge (Moderators Only)
+### Phase 1: Creating a Challenge (Any User)
 
-1. **Access the Form**: Moderators click on the subreddit menu and select "Create Geometric Challenge"
+1. **Access the Form**: Any user clicks on the subreddit menu and selects "Create Geometric Challenge"
 2. **Fill in the Details**:
    - **Description**: Write a geometric description (e.g., "A big rectangle with a right angle triangle on top with its longer side as base")
    - **Answer**: Provide the answer (e.g., "house")
@@ -25,11 +25,21 @@ Geometric Pictionary is a Reddit game where players describe objects using geome
 
 After submitting a guess, players immediately see:
 
-- **Top 10 Guesses**: The most popular answers with counts and percentages
-- **Their Guess**: Highlighted in the leaderboard if it's in the top 10
-- **Creator's Answer**: Marked with a green checkmark
+- **Top 10 Guesses**: The most popular answers ranked by count and percentage
+- **Their Guess**: Highlighted with an orange badge if it appears in the top 10
+- **Creator's Answer**: Shown separately below the leaderboard (not specially marked in the top 10)
 - **Player Stats**: Total players and total guesses
 - **Score**: Points earned based on how popular their guess was
+
+### Leaderboard Rules
+
+- Guesses are ranked **purely by count** (how many people guessed it)
+- If 10 people guessed "A", 9 guessed "B", and you guessed "C", then:
+  - Rank 1: A (10 votes)
+  - Rank 2: B (9 votes)
+  - Rank 3: C (1 vote) ← Your guess
+- The creator's answer gets **no special treatment** - it only appears in the top 10 if enough people guessed it
+- Similar guesses (85%+ similarity) are grouped together
 
 ### Scoring System
 
