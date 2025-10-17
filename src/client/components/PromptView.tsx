@@ -9,18 +9,35 @@ type PromptViewProps = {
 export const PromptView = ({ description, onSubmitGuess, loading }: PromptViewProps) => {
   const [guess, setGuess] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!guess.trim() || isSubmitting) {
+    // Clear previous validation errors
+    setValidationError(null);
+
+    // Validate guess
+    const trimmedGuess = guess.trim();
+    if (!trimmedGuess) {
+      setValidationError('Please enter a guess');
+      return;
+    }
+
+    if (trimmedGuess.length > 100) {
+      setValidationError('Guess must be 100 characters or less');
+      return;
+    }
+
+    if (isSubmitting) {
       return;
     }
 
     setIsSubmitting(true);
     try {
-      await onSubmitGuess(guess.trim());
-    } finally {
+      await onSubmitGuess(trimmedGuess);
+    } catch (error) {
+      // Error will be handled by parent component
       setIsSubmitting(false);
     }
   };
@@ -73,13 +90,25 @@ export const PromptView = ({ description, onSubmitGuess, loading }: PromptViewPr
                 id="guess-input"
                 type="text"
                 value={guess}
-                onChange={(e) => setGuess(e.target.value)}
+                onChange={(e) => {
+                  setGuess(e.target.value);
+                  setValidationError(null); // Clear error on input change
+                }}
                 placeholder="Enter your guess..."
-                className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-transparent"
+                className={`w-full px-4 py-3 text-lg border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent ${
+                  validationError
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 focus:ring-[#FF4500]'
+                }`}
                 disabled={isSubmitting}
                 maxLength={100}
                 autoFocus
               />
+              {validationError && (
+                <p className="mt-2 text-sm text-red-600" role="alert">
+                  {validationError}
+                </p>
+              )}
             </div>
 
             <button

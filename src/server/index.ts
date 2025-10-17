@@ -947,10 +947,10 @@ router.post<
   const { guess } = req.body;
 
   // Validate request body
-  if (guess === undefined || guess === null) {
+  if (guess === undefined || guess === null || guess.trim() === '') {
     res.status(400).json({
       status: 'error',
-      message: 'guess is required',
+      message: 'Guess cannot be empty',
     });
     return;
   }
@@ -969,7 +969,12 @@ router.post<
 
     // Check if user has already guessed
     const { hasUserGuessed, markUserAsGuessed } = await import('./services/guessTracking');
-    const alreadyGuessed = await hasUserGuessed(redis, postId, username);
+    const { retryOperation, executeWithPartialSuccess } = await import('./utils/retryLogic');
+
+    const alreadyGuessed = await retryOperation(
+      () => hasUserGuessed(redis, postId, username),
+      { operationName: 'Check if user guessed' }
+    );
 
     if (alreadyGuessed) {
       res.status(400).json({
@@ -982,14 +987,44 @@ router.post<
     // Normalize the guess
     const normalizedGuess = normalizeGuess(guess);
 
-    // Store guess using existing aggregation service
-    // Use postId as the "promptId" for custom prompts
-    await storeGuess(redis, 0, normalizedGuess, postId);
-    await addPlayerToSet(redis, 0, username, postId);
-    await storePlayerGuess(redis, 0, username, normalizedGuess, postId);
+    // Execute all Redis operations with partial success handling
+    const { errors, allSucceeded } = await executeWithPartialSuccess([
+      {
+        fn: () => storeGuess(redis, 0, normalizedGuess, postId),
+        name: 'Store guess',
+      },
+      {
+        fn: () => addPlayerToSet(redis, 0, username, postId),
+        name: 'Add player to set',
+      },
+      {
+        fn: () => storePlayerGuess(redis, 0, username, normalizedGuess, postId),
+        name: 'Store player guess',
+      },
+      {
+        fn: () => markUserAsGuessed(redis, postId, username),
+        name: 'Mark user as guessed',
+      },
+    ]);
 
-    // Mark user as having guessed
-    await markUserAsGuessed(redis, postId, username);
+    // If all operations failed, return error
+    if (errors.length === 4) {
+      console.error(
+        `[Redis Error] All Redis operations failed for post ${postId}, user ${username}`
+      );
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to submit guess. Please try again.',
+      });
+      return;
+    }
+
+    // If some operations succeeded, return success with warning
+    if (!allSucceeded) {
+      console.warn(
+        `[Redis Warning] Partial success for post ${postId}, user ${username}. Failed: ${errors.join(', ')}`
+      );
+    }
 
     res.json({
       type: 'guess-submitted',
@@ -1001,11 +1036,10 @@ router.post<
       error instanceof Error ? error.message : String(error),
       error instanceof Error ? error.stack : ''
     );
-    let errorMessage = 'Failed to submit guess';
-    if (error instanceof Error) {
-      errorMessage = `Failed to submit guess: ${error.message}`;
-    }
-    res.status(500).json({ status: 'error', message: errorMessage });
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to submit guess. Please try again.',
+    });
   }
 });
 

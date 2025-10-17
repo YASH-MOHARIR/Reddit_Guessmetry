@@ -70,7 +70,8 @@ export const App = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch results');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch results');
       }
 
       const data = await response.json();
@@ -84,6 +85,8 @@ export const App = () => {
       });
     } catch (err) {
       console.error('Failed to fetch results:', err);
+      // Don't set error state for results fetch failures during auto-refresh
+      // Just log and continue
     }
   }, [postId]);
 
@@ -98,7 +101,18 @@ export const App = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to submit guess');
+        const errorMessage = errorData.message || 'Failed to submit guess';
+        
+        // Show user-friendly error messages
+        if (response.status === 400) {
+          throw new Error(errorMessage);
+        } else if (response.status === 401) {
+          throw new Error('Authentication failed. Please refresh and try again.');
+        } else if (response.status === 500) {
+          throw new Error('Server error. Please try again in a moment.');
+        } else {
+          throw new Error(errorMessage);
+        }
       }
 
       // Fetch results after successful submission
@@ -106,7 +120,7 @@ export const App = () => {
       setAppState('results');
     } catch (err) {
       console.error('Failed to submit guess:', err);
-      setError(err instanceof Error ? err.message : 'Failed to submit guess');
+      setError(err instanceof Error ? err.message : 'Failed to submit guess. Please try again.');
       setAppState('error');
     }
   };

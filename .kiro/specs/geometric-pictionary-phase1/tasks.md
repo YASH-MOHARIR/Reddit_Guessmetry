@@ -32,7 +32,8 @@
   - Check player's guess is returned
   - _Requirements: 3.1, 3.2, 3.3_
 
-- [-] 5. Update ResultsView to match requirements
+- [ ] 5. Update ResultsView to match requirements
+
 
   - Remove special highlighting for creator's answer in top 10
   - Show creator's answer separately below leaderboard
@@ -40,7 +41,9 @@
   - Display stats (total players, total guesses)
   - _Requirements: 3.4, 3.5, 3.6, 3.8_
 
-- [ ] 6. Test complete flow end-to-end
+- [x] 6. Test complete flow end-to-end
+
+
   - Create post from menu
   - Open post and submit guess
   - Verify leaderboard shows correctly
@@ -49,13 +52,17 @@
 
 ## Polish & Optimization (Phase 1B - After Flow Confirmed)
 
-- [ ] 7. Add auto-refresh to leaderboard
+- [x] 7. Add auto-refresh to leaderboard
+
+
 
   - Implement 5-second auto-refresh
   - Add manual refresh button
   - _Requirements: 3.9, 3.10_
 
-- [ ] 8. Improve error handling
+- [x] 8. Improve error handling
+
+
 
   - Add client-side error messages
   - Improve server error responses

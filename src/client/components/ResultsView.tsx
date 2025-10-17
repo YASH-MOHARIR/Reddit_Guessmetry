@@ -22,6 +22,7 @@ export const ResultsView = ({
   onRefresh,
 }: ResultsViewProps) => {
   const [autoRefreshEnabled] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Auto-refresh every 5 seconds
   useEffect(() => {
@@ -33,6 +34,16 @@ export const ResultsView = ({
 
     return () => clearInterval(interval);
   }, [autoRefreshEnabled, onRefresh]);
+
+  const handleManualRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await onRefresh();
+    } finally {
+      // Add a small delay to show the loading state
+      setTimeout(() => setIsRefreshing(false), 300);
+    }
+  };
 
   const formatNumber = (num: number): string => {
     if (num >= 1000) {
@@ -142,11 +153,12 @@ export const ResultsView = ({
         {/* Refresh Button */}
         <div className="mt-6 text-center">
           <button
-            onClick={onRefresh}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4500] focus-visible:ring-offset-2"
+            onClick={handleManualRefresh}
+            disabled={isRefreshing}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4500] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span>🔄</span>
-            <span>Refresh Results</span>
+            <span className={isRefreshing ? 'animate-spin' : ''}>🔄</span>
+            <span>{isRefreshing ? 'Refreshing...' : 'Refresh Results'}</span>
           </button>
         </div>
       </div>
